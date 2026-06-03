@@ -1,4 +1,4 @@
-import { GitHubUser } from '../types/github';
+import type { GitHubUser } from '../types/github';
 
 interface UserCardProps {
   user: GitHubUser;

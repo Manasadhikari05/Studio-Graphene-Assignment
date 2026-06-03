@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchUserProfile, fetchUserRepos } from '../services/api';
-import { GitHubUser, RepoApiResponse } from '../types/github';
+import type { GitHubUser, RepoApiResponse } from '../types/github';
 
 /**
  * React Query hook for fetching a GitHub user's profile.

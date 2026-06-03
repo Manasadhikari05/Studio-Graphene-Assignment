@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { GitHubRepository } from '../types/github';
+import type { GitHubRepository } from '../types/github';
 
 interface LanguageAnalyticsProps {
   repos: GitHubRepository[];
@@ -66,38 +66,37 @@ export default function LanguageAnalytics({ repos }: LanguageAnalyticsProps) {
       </h3>
       
       <div className="flex flex-col md:flex-row items-center gap-8">
-        <div className="w-full md:w-1/2 h-64">
-          <ResponsiveContainer width="100%" height="100%">
-            <PieChart>
-              <Pie
-                data={data}
-                cx="50%"
-                cy="50%"
-                innerRadius={60}
-                outerRadius={90}
-                paddingAngle={2}
-                dataKey="value"
-                stroke="none"
-              >
-                {data.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value: number, name: string, props: any) => [
-                  `${value} repos (${props.payload.percentage}%)`,
-                  name,
-                ]}
-                contentStyle={{
-                  backgroundColor: 'rgba(255, 255, 255, 0.95)',
-                  borderRadius: '12px',
-                  border: 'none',
-                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-                  color: '#111827',
-                }}
-              />
-            </PieChart>
-          </ResponsiveContainer>
+        <div className="w-full md:w-1/2 h-64 flex justify-center items-center">
+          <PieChart width={300} height={250}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={90}
+              paddingAngle={2}
+              dataKey="value"
+              stroke="none"
+              isAnimationActive={false}
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip
+              formatter={(value: number, name: string, props: any) => [
+                `${value} repos (${props.payload.percentage}%)`,
+                name,
+              ]}
+              contentStyle={{
+                backgroundColor: 'rgba(255, 255, 255, 0.95)',
+                borderRadius: '12px',
+                border: 'none',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+                color: '#111827',
+              }}
+            />
+          </PieChart>
         </div>
 
         <div className="w-full md:w-1/2 flex flex-col gap-3">

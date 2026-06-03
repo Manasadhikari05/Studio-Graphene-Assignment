@@ -17,9 +17,9 @@ export default function Layout({ children }: LayoutProps) {
         {children}
       </main>
       <footer className="border-t border-gray-200 dark:border-gray-800 py-6 mt-auto">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-            Built with React, TypeScript & the GitHub API
+        <div className="max-w-4xl mx-auto text-center text-sm text-gray-500 dark:text-gray-400">
+          <p>
+            &copy; {new Date().getFullYear()} GitHub Repo Explorer.
           </p>
         </div>
       </footer>

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, useCallback, ReactNode } from 'react';
 
 export interface HistoryItem {
   id: string;
@@ -31,7 +31,7 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('searchHistory', JSON.stringify(history));
   }, [history]);
 
-  const addSearch = (username: string) => {
+  const addSearch = useCallback((username: string) => {
     if (!username.trim()) return;
     
     setHistory((prev) => {
@@ -46,11 +46,11 @@ export function HistoryProvider({ children }: { children: ReactNode }) {
       
       return newHistory;
     });
-  };
+  }, []);
 
-  const clearHistory = () => {
+  const clearHistory = useCallback(() => {
     setHistory([]);
-  };
+  }, []);
 
   return (
     <HistoryContext.Provider value={{ history, addSearch, clearHistory }}>

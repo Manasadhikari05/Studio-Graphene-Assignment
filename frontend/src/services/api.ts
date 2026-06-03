@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ApiResponse, GitHubUser, RepoApiResponse } from '../types/github';
+import type { ApiResponse, GitHubUser, RepoApiResponse } from '../types/github';
 
 /**
  * Axios instance configured to call our backend API.

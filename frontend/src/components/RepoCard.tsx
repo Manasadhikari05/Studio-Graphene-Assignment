@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GitHubRepository } from '../types/github';
+import type { GitHubRepository } from '../types/github';
 
 interface RepoCardProps {
   repo: GitHubRepository;

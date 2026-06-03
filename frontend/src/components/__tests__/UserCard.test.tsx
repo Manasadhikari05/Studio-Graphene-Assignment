@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import UserCard from '../UserCard';
-import { GitHubUser } from '../../types/github';
+import type { GitHubUser } from '../../types/github';
 
 const mockUser: GitHubUser = {
   login: 'octocat',
