@@ -81,14 +81,14 @@ npm run dev
 npm run dev
 ```
 
-The frontend runs on `http://localhost:5173` and the backend on `http://localhost:5000`.
+The frontend runs on `http://localhost:5173` and the backend on `http://localhost:5001`.
 
 ### Environment Variables
 
 Create a `.env` file in the `backend/` directory:
 
 ```env
-PORT=5000
+PORT=5001
 GITHUB_TOKEN=your_github_personal_access_token  # optional, increases rate limit
 ```
 

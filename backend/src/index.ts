@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import githubRoutes from './routes/github.routes';
+import { errorHandler } from './middlewares/errorHandler';
 
 dotenv.config();
 
@@ -18,6 +20,12 @@ app.get('/api/health', (_req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
+// API routes
+app.use('/api/github', githubRoutes);
+
+// Global error handler (must be registered last)
+app.use(errorHandler);
 
 // Start server
 app.listen(PORT, () => {
