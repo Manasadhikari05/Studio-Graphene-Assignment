@@ -4,6 +4,7 @@ import RepoCard from './RepoCard';
 import SkeletonRepoCard from './SkeletonRepoCard';
 import ErrorState from './ErrorState';
 import EmptyState from './EmptyState';
+import LanguageAnalytics from './LanguageAnalytics';
 
 interface RepoListProps {
   username: string;
@@ -81,6 +82,11 @@ export default function RepoList({ username }: RepoListProps) {
           </select>
         </div>
       </div>
+      
+      {/* Analytics Module */}
+      {repos.length > 0 && (
+        <LanguageAnalytics repos={repos} />
+      )}
 
       <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 ${isFetching ? 'opacity-50 pointer-events-none' : ''}`}>
         {repos.map((repo) => (
