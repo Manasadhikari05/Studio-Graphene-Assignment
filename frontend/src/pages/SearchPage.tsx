@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useDebounce } from '../hooks/useDebounce';
 import { useUserProfile } from '../hooks/useGitHub';
 import { useHistory } from '../context/HistoryContext';
 import UserCard from '../components/UserCard';
@@ -14,8 +13,8 @@ import ErrorState from '../components/ErrorState';
  */
 export default function SearchPage() {
   const [searchInput, setSearchInput] = useState('');
-  const debouncedUsername = useDebounce(searchInput, 500);
-  const { data: user, isLoading, isError, error } = useUserProfile(debouncedUsername);
+  const [submittedUsername, setSubmittedUsername] = useState('');
+  const { data: user, isLoading, isError, error } = useUserProfile(submittedUsername);
   const { history, addSearch, clearHistory } = useHistory();
 
   // Record successful search to history
@@ -40,7 +39,15 @@ export default function SearchPage() {
 
       {/* Search Bar */}
       <div className="max-w-2xl mx-auto">
-        <div className="relative">
+        <form 
+          className="relative"
+          onSubmit={(e) => {
+            e.preventDefault();
+            if (searchInput.trim()) {
+              setSubmittedUsername(searchInput.trim());
+            }
+          }}
+        >
           <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
             <svg
               className="w-5 h-5 text-gray-400"
@@ -70,7 +77,7 @@ export default function SearchPage() {
               <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
             </div>
           )}
-        </div>
+        </form>
         
         {/* Search History Chips */}
         {history.length > 0 && (
@@ -79,7 +86,10 @@ export default function SearchPage() {
             {history.map((item) => (
               <button
                 key={item.id}
-                onClick={() => setSearchInput(item.username)}
+                onClick={() => {
+                  setSearchInput(item.username);
+                  setSubmittedUsername(item.username);
+                }}
                 className="px-3 py-1 bg-gray-100 hover:bg-indigo-50 dark:bg-gray-800 dark:hover:bg-indigo-900/30 text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 text-sm rounded-full transition-colors border border-transparent hover:border-indigo-200 dark:hover:border-indigo-800/50"
               >
                 {item.username}
@@ -102,7 +112,7 @@ export default function SearchPage() {
         />
       )}
 
-      {isLoading && debouncedUsername && (
+      {isLoading && submittedUsername && (
         <div className="max-w-4xl mx-auto w-full">
           <SkeletonUserCard />
         </div>
@@ -116,7 +126,7 @@ export default function SearchPage() {
       )}
 
       {/* Empty state — shown when no search has been performed */}
-      {!user && !isLoading && !isError && !debouncedUsername && (
+      {!user && !isLoading && !isError && !submittedUsername && (
         <div className="text-center py-12">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 dark:bg-gray-800 mb-4">
             <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
