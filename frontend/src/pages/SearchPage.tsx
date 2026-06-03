@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useUserProfile } from '../hooks/useGitHub';
+import UserCard from '../components/UserCard';
 
 /**
  * Search page — main landing page of the application.
@@ -72,36 +73,8 @@ export default function SearchPage() {
       )}
 
       {user && (
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
-            <img
-              src={user.avatar_url}
-              alt={`${user.login}'s avatar`}
-              className="w-24 h-24 rounded-full mx-auto mb-4 ring-4 ring-indigo-100 dark:ring-indigo-900/50"
-            />
-            <h3 className="text-xl font-bold text-gray-900 dark:text-white">
-              {user.name || user.login}
-            </h3>
-            <p className="text-gray-500 dark:text-gray-400 mt-1">
-              @{user.login}
-            </p>
-            {user.bio && (
-              <p className="text-gray-600 dark:text-gray-300 mt-3 text-sm">
-                {user.bio}
-              </p>
-            )}
-            <div className="flex justify-center gap-6 mt-4 text-sm">
-              <span className="text-gray-600 dark:text-gray-400">
-                <strong className="text-gray-900 dark:text-white">{user.followers}</strong> followers
-              </span>
-              <span className="text-gray-600 dark:text-gray-400">
-                <strong className="text-gray-900 dark:text-white">{user.following}</strong> following
-              </span>
-              <span className="text-gray-600 dark:text-gray-400">
-                <strong className="text-gray-900 dark:text-white">{user.public_repos}</strong> repos
-              </span>
-            </div>
-          </div>
+        <div className="max-w-4xl mx-auto w-full">
+          <UserCard user={user} />
         </div>
       )}
 
