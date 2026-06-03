@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { GitHubRepository } from '../types/github';
 
 interface RepoCardProps {
@@ -25,6 +26,8 @@ const languageColors: Record<string, string> = {
 };
 
 export default function RepoCard({ repo }: RepoCardProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const languageColor = repo.language ? languageColors[repo.language] || '#8b949e' : null;
   const updatedAt = new Date(repo.updated_at).toLocaleDateString('en-US', {
     month: 'short',
@@ -33,16 +36,16 @@ export default function RepoCard({ repo }: RepoCardProps) {
   });
 
   return (
-    <a
-      href={repo.html_url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="block group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-700/50 transition-all duration-300"
-    >
+    <div className="block group bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl p-5 hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-700/50 transition-all duration-300">
       <div className="flex justify-between items-start gap-4 mb-2">
-        <h3 className="text-xl font-semibold text-indigo-600 dark:text-indigo-400 group-hover:text-indigo-700 dark:group-hover:text-indigo-300 break-words flex-1">
+        <a
+          href={repo.html_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xl font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 break-words flex-1"
+        >
           {repo.name}
-        </h3>
+        </a>
         
         <div className="flex items-center gap-1.5 bg-gray-50 dark:bg-gray-800/80 px-2.5 py-1 rounded-full border border-gray-100 dark:border-gray-700/50 flex-shrink-0">
           <svg className="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
@@ -75,7 +78,51 @@ export default function RepoCard({ repo }: RepoCardProps) {
           </svg>
           Updated {updatedAt}
         </div>
+        
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            setIsExpanded(!isExpanded);
+          }}
+          className="ml-auto flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 font-medium transition-colors"
+        >
+          {isExpanded ? 'Less details' : 'More details'}
+          <svg
+            className={`w-4 h-4 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
       </div>
-    </a>
+
+      {/* Expanded Details Section */}
+      <div
+        className={`grid transition-all duration-300 ease-in-out ${
+          isExpanded ? 'grid-rows-[1fr] opacity-100 mt-4' : 'grid-rows-[0fr] opacity-0 mt-0'
+        }`}
+      >
+        <div className="overflow-hidden">
+          <div className="pt-4 border-t border-gray-100 dark:border-gray-800/80 grid grid-cols-3 gap-4">
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Forks</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-200">{repo.forks_count}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Open Issues</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-200">{repo.open_issues_count}</span>
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Default Branch</span>
+              <span className="text-sm font-medium text-gray-900 dark:text-gray-200 truncate" title={repo.default_branch}>
+                {repo.default_branch}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
