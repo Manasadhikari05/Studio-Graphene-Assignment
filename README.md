@@ -63,21 +63,21 @@ git clone https://github.com/Manasadhikari05/Studio-Graphene-Assignment.git
 cd Studio-Graphene-Assignment
 
 # Install backend dependencies
-cd server
+cd backend
 npm install
 
 # Install frontend dependencies
-cd ../client
+cd ../frontend
 npm install
 ```
 
 ### Running Locally
 
 ```bash
-# Start the backend (from /server)
+# Start the backend (from /backend)
 npm run dev
 
-# Start the frontend (from /client)
+# Start the frontend (from /frontend)
 npm run dev
 ```
 
@@ -85,7 +85,7 @@ The frontend runs on `http://localhost:5173` and the backend on `http://localhos
 
 ### Environment Variables
 
-Create a `.env` file in the `server/` directory:
+Create a `.env` file in the `backend/` directory:
 
 ```env
 PORT=5000
@@ -95,7 +95,7 @@ GITHUB_TOKEN=your_github_personal_access_token  # optional, increases rate limit
 ## Project Structure
 
 ```
-├── client/                 # React frontend
+├── frontend/               # React frontend
 │   └── src/
 │       ├── components/     # Reusable UI components
 │       ├── pages/          # Page-level components
@@ -105,7 +105,7 @@ GITHUB_TOKEN=your_github_personal_access_token  # optional, increases rate limit
 │       ├── types/          # TypeScript type definitions
 │       └── utils/          # Utility functions
 │
-├── server/                 # Express backend
+├── backend/                # Express backend
 │   └── src/
 │       ├── routes/         # API route definitions
 │       ├── controllers/    # Request handlers
