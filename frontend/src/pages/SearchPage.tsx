@@ -67,16 +67,25 @@ export default function SearchPage() {
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search GitHub username..."
-            className="w-full pl-12 pr-4 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm text-lg transition-all duration-200"
+            placeholder="Search GitHub username and press Enter..."
+            className="w-full pl-12 pr-24 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent shadow-sm text-lg transition-all duration-200"
             id="search-input"
             autoComplete="off"
           />
-          {isLoading && (
-            <div className="absolute inset-y-0 right-0 pr-4 flex items-center">
-              <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-            </div>
-          )}
+          
+          {/* Submit button / Enter hint */}
+          <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+            {isLoading ? (
+              <div className="w-5 h-5 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mr-2" />
+            ) : searchInput.trim() ? (
+              <button
+                type="submit"
+                className="flex items-center gap-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 px-3 py-1.5 rounded-xl text-sm font-medium hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
+              >
+                Enter ↵
+              </button>
+            ) : null}
+          </div>
         </form>
         
         {/* Search History Chips */}
