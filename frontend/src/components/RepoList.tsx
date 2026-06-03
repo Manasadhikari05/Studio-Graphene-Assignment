@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useUserRepos } from '../hooks/useGitHub';
 import RepoCard from './RepoCard';
 
@@ -6,9 +7,9 @@ interface RepoListProps {
 }
 
 export default function RepoList({ username }: RepoListProps) {
-  // Using default sort='updated' and page=1 for now.
-  // We'll add sorting controls and pagination in later phases.
-  const { data, isLoading, isError, error } = useUserRepos(username);
+  const [sort, setSort] = useState<string>('updated');
+  // We'll add pagination in later phases.
+  const { data, isLoading, isError, error } = useUserRepos(username, { sort });
 
   if (isLoading) {
     return (
@@ -52,7 +53,22 @@ export default function RepoList({ username }: RepoListProps) {
             {data?.pagination.returned}
           </span>
         </h3>
-        {/* Sorting controls placeholder - to be added in Phase 9 */}
+        
+        <div className="flex items-center gap-2">
+          <label htmlFor="sort-repos" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Sort by:
+          </label>
+          <select
+            id="sort-repos"
+            value={sort}
+            onChange={(e) => setSort(e.target.value)}
+            className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block p-2 transition-colors"
+          >
+            <option value="updated">Recently Updated</option>
+            <option value="stars">Most Stars</option>
+            <option value="name">Name (A-Z)</option>
+          </select>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
