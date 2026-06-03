@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useUserProfile } from '../hooks/useGitHub';
+import { useHistory } from '../context/HistoryContext';
 import UserCard from '../components/UserCard';
 import RepoList from '../components/RepoList';
 import SkeletonUserCard from '../components/SkeletonUserCard';
@@ -15,6 +16,14 @@ export default function SearchPage() {
   const [searchInput, setSearchInput] = useState('');
   const debouncedUsername = useDebounce(searchInput, 500);
   const { data: user, isLoading, isError, error } = useUserProfile(debouncedUsername);
+  const { history, addSearch, clearHistory } = useHistory();
+
+  // Record successful search to history
+  useEffect(() => {
+    if (user && !isLoading && !isError) {
+      addSearch(user.login);
+    }
+  }, [user, isLoading, isError, addSearch]);
 
   return (
     <div className="space-y-8">
@@ -62,6 +71,28 @@ export default function SearchPage() {
             </div>
           )}
         </div>
+        
+        {/* Search History Chips */}
+        {history.length > 0 && (
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <span className="text-sm text-gray-500 dark:text-gray-400">Recent:</span>
+            {history.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => setSearchInput(item.username)}
+                className="px-3 py-1 bg-gray-100 hover:bg-indigo-50 dark:bg-gray-800 dark:hover:bg-indigo-900/30 text-gray-700 hover:text-indigo-600 dark:text-gray-300 dark:hover:text-indigo-400 text-sm rounded-full transition-colors border border-transparent hover:border-indigo-200 dark:hover:border-indigo-800/50"
+              >
+                {item.username}
+              </button>
+            ))}
+            <button
+              onClick={clearHistory}
+              className="px-2 py-1 text-xs text-gray-400 hover:text-red-500 dark:text-gray-500 dark:hover:text-red-400 transition-colors ml-auto"
+            >
+              Clear
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Results Area */}
