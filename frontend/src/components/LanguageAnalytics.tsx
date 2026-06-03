@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip } from 'recharts';
 import type { GitHubRepository } from '../types/github';
 
 interface LanguageAnalyticsProps {
@@ -84,7 +84,7 @@ export default function LanguageAnalytics({ repos }: LanguageAnalyticsProps) {
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number, name: string, props: any) => [
+              formatter={(value: any, name: any, props: any) => [
                 `${value} repos (${props.payload.percentage}%)`,
                 name,
               ]}
