@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
-import { GitHubUser } from '../types';
+import { GitHubUser, GitHubRepository } from '../types';
 
 /**
  * Service layer for interacting with the GitHub REST API.
@@ -34,6 +34,50 @@ class GitHubService {
     try {
       const response = await this.client.get<GitHubUser>(`/users/${username}`);
       return response.data;
+    } catch (error) {
+      throw this.handleApiError(error as AxiosError);
+    }
+  }
+
+  /**
+   * Fetch repositories for a given GitHub user.
+   * Supports pagination and sorting by stars, name, or updated date.
+   */
+  async getUserRepos(
+    username: string,
+    options: { sort?: string; page?: number; perPage?: number } = {}
+  ): Promise<{ repos: GitHubRepository[]; totalCount: number }> {
+    const { sort = 'updated', page = 1, perPage = 10 } = options;
+
+    // Map our sort values to GitHub API params
+    const sortMap: Record<string, { sort: string; direction: string }> = {
+      stars: { sort: 'pushed', direction: 'desc' },
+      name: { sort: 'full_name', direction: 'asc' },
+      updated: { sort: 'updated', direction: 'desc' },
+    };
+
+    const sortConfig = sortMap[sort] || sortMap.updated;
+
+    try {
+      const response = await this.client.get<GitHubRepository[]>(
+        `/users/${username}/repos`,
+        {
+          params: {
+            sort: sortConfig.sort,
+            direction: sortConfig.direction,
+            page,
+            per_page: perPage,
+            type: 'owner', // exclude forks from the listing
+          },
+        }
+      );
+
+      // GitHub doesn't return total count in body; we get it from the user profile
+      // For now, return the array length as a proxy
+      return {
+        repos: response.data,
+        totalCount: response.data.length,
+      };
     } catch (error) {
       throw this.handleApiError(error as AxiosError);
     }
