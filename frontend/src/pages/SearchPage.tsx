@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDebounce } from '../hooks/useDebounce';
 import { useUserProfile } from '../hooks/useGitHub';
 import UserCard from '../components/UserCard';
+import RepoList from '../components/RepoList';
 
 /**
  * Search page — main landing page of the application.
@@ -75,6 +76,7 @@ export default function SearchPage() {
       {user && (
         <div className="max-w-4xl mx-auto w-full">
           <UserCard user={user} />
+          <RepoList username={user.login} />
         </div>
       )}
 
