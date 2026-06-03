@@ -3,6 +3,8 @@ import { useDebounce } from '../hooks/useDebounce';
 import { useUserProfile } from '../hooks/useGitHub';
 import UserCard from '../components/UserCard';
 import RepoList from '../components/RepoList';
+import SkeletonUserCard from '../components/SkeletonUserCard';
+import ErrorState from '../components/ErrorState';
 
 /**
  * Search page — main landing page of the application.
@@ -64,16 +66,18 @@ export default function SearchPage() {
 
       {/* Results Area */}
       {isError && (
-        <div className="max-w-2xl mx-auto">
-          <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-center">
-            <p className="text-red-600 dark:text-red-400 font-medium">
-              {error?.message || 'Something went wrong. Please try again.'}
-            </p>
-          </div>
+        <ErrorState
+          message={error?.message || 'Something went wrong. Please try again.'}
+        />
+      )}
+
+      {isLoading && debouncedUsername && (
+        <div className="max-w-4xl mx-auto w-full">
+          <SkeletonUserCard />
         </div>
       )}
 
-      {user && (
+      {user && !isLoading && !isError && (
         <div className="max-w-4xl mx-auto w-full">
           <UserCard user={user} />
           <RepoList username={user.login} />

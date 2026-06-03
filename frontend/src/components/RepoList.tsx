@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useUserRepos } from '../hooks/useGitHub';
 import RepoCard from './RepoCard';
+import SkeletonRepoCard from './SkeletonRepoCard';
+import ErrorState from './ErrorState';
+import EmptyState from './EmptyState';
 
 interface RepoListProps {
   username: string;
@@ -13,18 +16,20 @@ export default function RepoList({ username }: RepoListProps) {
 
   if (isLoading) {
     return (
-      <div className="mt-8 flex justify-center py-12">
-        <div className="w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+      <div className="mt-8 space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          {[...Array(4)].map((_, i) => (
+            <SkeletonRepoCard key={i} />
+          ))}
+        </div>
       </div>
     );
   }
 
   if (isError) {
     return (
-      <div className="mt-8 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-4 text-center">
-        <p className="text-red-600 dark:text-red-400 font-medium">
-          Failed to load repositories: {error?.message}
-        </p>
+      <div className="mt-8">
+        <ErrorState message={error?.message || 'Failed to load repositories.'} />
       </div>
     );
   }
@@ -33,10 +38,11 @@ export default function RepoList({ username }: RepoListProps) {
 
   if (repos.length === 0) {
     return (
-      <div className="mt-8 text-center py-12 bg-gray-50 dark:bg-gray-800/30 rounded-2xl border border-gray-200 dark:border-gray-800 border-dashed">
-        <p className="text-gray-500 dark:text-gray-400">
-          This user doesn't have any public repositories yet.
-        </p>
+      <div className="mt-8">
+        <EmptyState
+          title="No public repositories"
+          message="This user doesn't have any public repositories yet."
+        />
       </div>
     );
   }
